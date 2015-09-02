@@ -1,0 +1,13 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/username/repository.git"
+  },
+  "dependencies": {
+    "mongojs" : "",
+    "request" : "",
+    "restify" : "",
+    "split" : "",
+    "unzip" : ""
+  }
+}
