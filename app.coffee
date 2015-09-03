@@ -18,18 +18,10 @@ process_line = (line) ->
 
     if !header?
         header = row
-        header[0] = 'EUR'
     else
-        bulk = db.rates.initializeOrderedBulkOp()
-        base = row[0]
-        row[0] = 1
-        for rate, i in row when isFinite(rate)
-            symbol = header[i]
-            rate = rate / base
-            bulk.insert {rate_date, symbol, rate}
-            count++
-
-        bulk.execute (err, res) ->
+        bulk = db.rates.initializeUnorderedBulkOp()
+        bulk.insert {rate_date: rate_date, symbol: header[i], rate: rate} for rate, i in row when isFinite(rate)
+        bulk.execute (err, result) -> count += result.nInserted
 
 
 currency_update = (req, res, next) -> 
@@ -37,8 +29,6 @@ currency_update = (req, res, next) ->
 
         db.rates.drop (err, reply) ->
             count = 0
-            #fs = require 'fs'
-            #fs.createReadStream('./data/eurofxref-hist.zip')
             request(url)
                 .pipe unzip.Parse()
                 .on 'entry', (file) ->
@@ -48,15 +38,27 @@ currency_update = (req, res, next) ->
                         res.setHeader 'Content-Type', 'application/json'
                         res.send 'Count = ' + count
 
-        next()
 
-list = (req, res, next) ->
-        res.setHeader 'Content-Type', 'text/plain'
-        res.send 'List goes here'
-        next()
+currency_rate = (req, res, next) ->
+    db.rates.find({symbol: req.params.symbol}, {_id: 0, rate_date: 1, rate: 1}, (err, result) ->
+        res.setHeader 'Content-Type', 'application/json'
+        res.send result
+    )
 
-server.get '/', list
+
+currency_list = (req, res, next) ->
+    db.rates.distinct("symbol", {}, (err, result) ->
+        res.setHeader 'Content-Type', 'application/json'
+
+        res.send result
+    )
+
+
+
+server.get '/currency', currency_list
+server.get '/currency/list', currency_list
 server.get '/currency/update', currency_update
+server.get '/currency/rate/:symbol', currency_rate
 
 server.listen 8081, ->
     console.log '%s listening at %s', server.name, server.url
