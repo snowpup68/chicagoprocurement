@@ -50,6 +50,12 @@ currency_update = (req, res, next) ->
 
         next()
 
+list = (req, res, next) ->
+        res.setHeader 'Content-Type', 'text/plain'
+        res.send 'List goes here'
+        next()
+
+server.get '/', list
 server.get '/currency/update', currency_update
 
 server.listen 8081, ->
