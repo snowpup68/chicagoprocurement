@@ -40,19 +40,15 @@ currency_update = (req, res, next) ->
 
 
 currency_rate = (req, res, next) ->
-    db.rates.find({symbol: req.params.symbol}, {_id: 0, rate_date: 1, rate: 1}, (err, result) ->
+    db.rates.find {symbol: req.params.symbol}, {_id: 0, rate_date: 1, rate: 1}, (err, result) ->
         res.setHeader 'Content-Type', 'application/json'
         res.send result
-    )
 
 
 currency_list = (req, res, next) ->
-    db.rates.distinct("symbol", {}, (err, result) ->
+    db.rates.distinct "symbol", {}, (err, result) ->
         res.setHeader 'Content-Type', 'application/json'
-
         res.send result
-    )
-
 
 
 server.get '/currency', currency_list
