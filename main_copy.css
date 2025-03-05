@@ -1,0 +1,51 @@
+body {
+    background-color: hsl(200, 10%, 90%);
+}
+
+nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: hsl(200, 60%, 50%);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-bottom: 10px;
+  }
+  
+  nav a {
+    display: block;
+    float: left;
+    color: hsl(200, 18%, 85%);
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+  }
+  
+  nav a.right {
+    float: right;
+  }
+
+  nav a:hover {
+    background-color: hsla(200, 56%, 20%, 0.5);
+    color: hsl(0, 100%, 100%);
+  }
+
+  h1.title {
+    text-align: center;
+  }
+
+  .dropdown {
+    float: left;
+    overflow: hidden;
+  }
+
+  .dropdown .dropbtn {
+    font-size: 16px;  
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: inherit;
+    margin: 0;
+  }
